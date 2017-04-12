@@ -126,6 +126,7 @@
             // Use Ajax to submit form data
             $.post($form.attr('action'), $form.serialize(), function(result) {
                 console.log("result is : "+result);
+                $("#success_message").html("Success <i class='glyphicon glyphicon-thumbs-up'></i> Thanks for creating complaint. Your token no is "+result.token);
             }, 'json');
         });
 });

@@ -49,11 +49,13 @@ router.post("/submitForm",function(req,res,next){
       }
       console.log("insert complaint successfull : ",result); 
       conn.release();
-      client.incr(body.storeId+":"+body.category,function(err,result){
+      client.incr(body.storeId,function(err,result){
         console.log("Result of incr : "+result);
-        client.get(body.storeId+":"+body.category,function(err,resu){
+        client.get(body.storeId,function(err,resu){
           console.log("Result for redis get : "+resu);
-          res.json({"status" : true, "message" : "complaint registered successfully"}); 
+          client.rpush(body.storeId+"_"+body.category,resu);
+          console.log("Pushed in redis list queye : "+(body.storeId+"_"+body.category));
+          res.json({"status" : true, "message" : "complaint registered successfully","token" : resu}); 
           return;
         });
       });
